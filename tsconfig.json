@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022"
+  },
+  "exclude": ["node_modules"],
+  "include": ["src/**/*.ts"]
+}
