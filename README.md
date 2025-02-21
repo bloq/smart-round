@@ -1,15 +1,13 @@
 # smart-round
 
-[![Build Status](https://travis-ci.com/autonomoussoftware/smart-round.svg?branch=master)](https://travis-ci.com/autonomoussoftware/smart-round)
-[![Code Style](https://img.shields.io/badge/code%20style-bloq-0063a6.svg)](https://github.com/bloq/eslint-config-bloq)
-[![Known Vulnerabilities](https://snyk.io/test/github/autonomoussoftware/smart-round/badge.svg?targetFile=package.json)](https://snyk.io/test/github/autonomoussoftware/smart-round:package.json)
+![NPM Version](https://img.shields.io/npm/v/smart-round)
 
-Round big numbers with arbitrary precision
+Round big numbers with arbitrary precision.
 
 ## Installation
 
-```bash
-$ npm install --save smart-round
+```sh
+npm install --save smart-round
 ```
 
 ## Usage
@@ -24,34 +22,25 @@ The module exports a function that let you initialize a rounder function.
 
 ### `rounder(number, shouldFormat)`
 
-`number`: The value to round as any type supported by [`bignumber.js`](https://github.com/MikeMcl/bignumber.js) package.
-`shouldFormat`: Whether the returned string should be formatted or not, using [`accounting`](https://github.com/openexchangerates/accounting.js) package.
+`input`: The value to round. Accepts any type supported by [`bignumber.js`](https://github.com/MikeMcl/bignumber.js) package.
+`options`: An optional object to customize the formatting:
 
+- `options.locale`: Optional. Format used to format when `options.shouldFormat`is true. Defaults to `en-US`.
+- `options.roundingMode` Optional. Specifies the rounding method. Accepted values: `round-up`, `round-down` ,`round-ceil`, `round-floor`, `round-half-up`, `round-half-down`, `round-half-even`, `round-half-ceil`, `round-half-floor`. Defaults to `round-half-up`.
+- `options.shouldFormat`: Optional. Defaults to `false`. Indicates whether the string should be formatted using [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat),
 
 ## Example
 
 ```js
-const smartRound = require('smart-round')
+import { smartRound } from "smart-round";
 
-const rounder1 = smartRound(6, 0, 6)
+const rounder1 = smartRound(6, 0, 6);
 
-console.log(rounder1('1234.56789', false)) // '1234.57'
-console.log(rounder1('1234.56789', true)) // '1,234.56'
+console.log(rounder1("1234.56789")); // '1234.57'
+console.log(rounder1("1234.56789", { shouldFormat: true })); // '1,234.56'
 
-const rounder2 = smartRound(4, 2, 6)
+const rounder2 = smartRound(4, 2, 6);
 
-console.log(rounder2('1234', true)) // '1,234.00'
-console.log(rounder2('0.000123456', true)) // '0.000123'
+console.log(rounder2("1234", { shouldFormat: true })); // '1,234.00'
+console.log(rounder2("0.000123456", { shouldFormat: true })); // '0.000123'
 ```
-
-### ES5 support
-
-A transpiled version is available in `es5/index.js`. To use that specific version, this syntax is also supported:
-
-```js
-var smartRound = require('smart-round/es5');
-```
-
-## License
-
-MIT

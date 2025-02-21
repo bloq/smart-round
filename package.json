@@ -1,56 +1,74 @@
 {
   "name": "smart-round",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Round big numbers with arbitrary precision",
   "keywords": [
-    "round",
     "bignumber",
     "decimals",
-    "precision"
+    "precision",
+    "round",
+    "typescript"
   ],
   "license": "MIT",
   "author": "Gabriel Montes <gabriel@bloq.com>",
+  "contributors": [
+    {
+      "email": "gonzalo@bloq.com",
+      "name": "Gonzalo D'Elia"
+    }
+  ],
   "files": [
-    "es5",
-    "src"
+    "_cjs",
+    "_esm",
+    "_types",
+    "src/**/*.ts"
   ],
   "main": "src/index.js",
-  "browser": "es5/index.js",
-  "repository": "autonomoussoftware/smart-round",
+  "repository": "bloq/smart-round",
   "scripts": {
-    "build": "babel -d es5/ src/",
-    "check": "npm-check -p -i eslint*",
-    "coverage": "nyc --lines 95 --functions 95 --branches 95 --reporter=lcov --reporter=text npm test",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:types",
+    "build:cjs": "tsc --noEmit false --module CommonJS --moduleResolution node --outDir ./_cjs --sourceMap && echo '{\"type\":\"commonjs\"}' > ./_cjs/package.json",
+    "build:esm": "tsc --noEmit false --outDir ./_esm --sourceMap",
+    "build:types": "tsc --noEmit false --declarationDir ./_types --emitDeclarationOnly --declaration --declarationMap",
+    "clean": "rm -rf ./_esm ./_cjs ./_types",
+    "coverage": "vitest run --coverage.enabled --coverage.exclude=*.config.js",
+    "deps:check": "knip",
+    "format:check": "prettier --check .",
     "lint": "eslint --cache .",
-    "precommit": "npm run lint",
-    "prepublishOnly": "npm run build && npm run precommit && npm run prepush && tag-matches",
-    "prepush": "npm run check",
-    "test": "mocha"
+    "prepare": "husky",
+    "prepublishOnly": "npm run build",
+    "test": "vitest run"
   },
   "dependencies": {
-    "accounting": "^0.4.1",
-    "bignumber.js": "^7.2.1"
+    "bignumber.js": "9.1.2"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "chai": "^4.0.0",
-    "check-tag-matches": "^1.0.0",
-    "eslint": "^5.1.0",
-    "eslint-config-bloq": "^1.2.2",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.12.0",
-    "eslint-plugin-jsdoc": "^3.7.0",
-    "eslint-plugin-mocha": "^5.1.0",
-    "eslint-plugin-node": "^7.0.1",
-    "eslint-plugin-prefer-arrow": "^1.0.0",
-    "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.1.0",
-    "husky": "^0.14.3",
-    "mocha": "^5.2.0",
-    "npm-check": "^5.7.1",
-    "nyc": "^12.0.2"
+    "@commitlint/cli": "19.7.1",
+    "@vitest/coverage-v8": "3.0.6",
+    "better-sort-package-json": "1.1.0",
+    "commitlint-config-bloq": "1.1.0",
+    "eslint": "8.57.1",
+    "eslint-config-bloq": "4.5.0",
+    "husky": "9.1.7",
+    "knip": "5.44.4",
+    "lint-staged": "15.4.3",
+    "prettier": "3.5.1",
+    "typescript": "5.7.3",
+    "vitest": "3.0.6"
   },
-  "preferGlobal": false,
-  "private": false
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./_esm/index.js",
+      "require": "./_cjs/index.js",
+      "types": "./_types/index.d.ts"
+    },
+    "./contracts": {
+      "import": "./_esm/contracts/index.js",
+      "types": "./_types/contracts/index.d.ts"
+    }
+  },
+  "module": "./_esm/index.js",
+  "types": "./_types/index.d.ts",
+  "typings": "./_types/index.d.ts"
 }

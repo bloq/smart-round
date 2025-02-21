@@ -1,6 +1,11 @@
+_cjs
+_esm
+_types
 .eslintcache
 .nyc_output
+.vscode
 coverage
 es5
 node_modules
 npm-debug.log
+tsconfig.tsbuildinfo
