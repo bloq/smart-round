@@ -1,6 +1,6 @@
-import { BigNumber } from "bignumber.js";
+import Big, { BigSource } from "big.js";
 
-import { RoundingMode, toBigNumberRoundingModes } from "./roundingModes.js";
+import { RoundingMode, toBigJsRoundingModes } from "./roundingModes.js";
 
 type Options = {
   locale?: string;
@@ -8,12 +8,50 @@ type Options = {
   shouldFormat?: boolean;
 };
 
+const getDecimalPlaces = (bigJsNumber: Big) =>
+  bigJsNumber.toFixed().split(".")[1]?.length ?? 0;
+
+const parse = function ({
+  input,
+  maxDecimals,
+  maxPrecision,
+  minDecimals,
+}: {
+  input: BigSource;
+  maxDecimals: number;
+  maxPrecision: number;
+  minDecimals: number;
+}) {
+  if (maxPrecision <= 0) {
+    throw new Error("maxPrecision should be positive larger than 1");
+  }
+  if (minDecimals < 0) {
+    throw new Error("minDecimals should be positive");
+  }
+  if (maxDecimals < 0) {
+    throw new Error("maxDecimals should be positive");
+  }
+  if (minDecimals > maxDecimals) {
+    throw new Error("minDecimals should be larger than maxDecimals");
+  }
+  if (typeof input === "number" && (isNaN(input) || !isFinite(input))) {
+    throw new Error("input should be a valid number");
+  }
+
+  try {
+    const bigJsNumber = new Big(input.toString().replaceAll(",", ""));
+    return bigJsNumber;
+  } catch {
+    throw new Error("input should be a valid number");
+  }
+};
+
 export const smartRound = (
   maxPrecision: number,
   minDecimals: number,
   maxDecimals: number,
 ) =>
-  function (input: BigNumber.Value, options?: Options) {
+  function (input: BigSource, options?: Options) {
     const {
       locale = "en-US",
       // Big Number default's, but just to make it explicit
@@ -21,38 +59,28 @@ export const smartRound = (
       shouldFormat = false,
     } = options ?? {};
 
-    if (maxPrecision <= 0) {
-      throw new Error("maxPrecision should be positive larger than 1");
-    }
-    if (minDecimals < 0) {
-      throw new Error("minDecimals should be positive");
-    }
-    if (maxDecimals < 0) {
-      throw new Error("maxDecimals should be positive");
-    }
-    if (minDecimals > maxDecimals) {
-      throw new Error("minDecimals should be larger than maxDecimals");
-    }
+    const bigJsNumber = parse({
+      input,
+      maxDecimals,
+      maxPrecision,
+      minDecimals,
+    });
 
-    const bn = new BigNumber(input);
-
-    if (bn.isNaN() || !bn.isFinite()) {
-      throw new Error("input should be a valid number");
-    }
     // Calculate how much to reduce the precision
-    const adjustment = Math.max(bn.precision() - maxPrecision, 0);
+    // The array of digits is the precision
+    const adjustment = Math.max(bigJsNumber.c.length - maxPrecision, 0);
 
     // Calculate how much to reduce the decimals
     const decimals = Math.max(
-      (bn.decimalPlaces() ?? 0) - adjustment,
+      getDecimalPlaces(bigJsNumber) - adjustment,
       minDecimals,
     );
 
     const newDecimals = Math.min(decimals, maxDecimals);
 
-    const string = bn.toFixed(
+    const string = bigJsNumber.toFixed(
       newDecimals,
-      toBigNumberRoundingModes(roundingMode),
+      toBigJsRoundingModes(roundingMode),
     );
 
     if (!shouldFormat) {
