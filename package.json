@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "Round big numbers with arbitrary precision",
   "keywords": [
-    "bignumber",
+    "big.js",
     "decimals",
     "precision",
     "round",
@@ -40,10 +40,11 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "bignumber.js": "9.1.2"
+    "big.js": "7.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "19.7.1",
+    "@types/big.js": "6.2.2",
     "@vitest/coverage-v8": "3.0.6",
     "better-sort-package-json": "1.1.0",
     "commitlint-config-bloq": "1.1.0",

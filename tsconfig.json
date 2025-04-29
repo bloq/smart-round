@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": false,
     "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
     "incremental": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
