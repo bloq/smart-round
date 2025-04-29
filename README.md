@@ -1,6 +1,6 @@
 # smart-round
 
-![NPM Version](https://img.shields.io/npm/v/smart-round)
+![NPM Version](https://img.shields.io/npm/v/smart-round)![npm bundle size](https://img.shields.io/bundlephobia/minzip/smart-round)
 
 Round big numbers with arbitrary precision.
 
