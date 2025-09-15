@@ -1,6 +1,6 @@
 {
   "name": "smart-round",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Round big numbers with arbitrary precision",
   "keywords": [
     "big.js",

@@ -193,10 +193,10 @@ describe("smartRound", function () {
     expect(() => rounder("1")).toThrowError("maxDecimals should be positive");
   });
 
-  it("should not allow minDecimals smaller than maxDecimals", function () {
+  it("should not allow maxDecimals smaller than minDecimals", function () {
     const rounder = smartRound(1, 3, 2);
     expect(() => rounder("1")).toThrowError(
-      "minDecimals should be larger than maxDecimals",
+      "minDecimals should not be larger than maxDecimals",
     );
   });
 

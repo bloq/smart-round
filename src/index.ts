@@ -32,7 +32,7 @@ const parse = function ({
     throw new Error("maxDecimals should be positive");
   }
   if (minDecimals > maxDecimals) {
-    throw new Error("minDecimals should be larger than maxDecimals");
+    throw new Error("minDecimals should not be larger than maxDecimals");
   }
   if (typeof input === "number" && (isNaN(input) || !isFinite(input))) {
     throw new Error("input should be a valid number");
